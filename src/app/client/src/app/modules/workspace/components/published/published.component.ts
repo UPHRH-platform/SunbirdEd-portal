@@ -169,6 +169,8 @@ export class PublishedComponent extends WorkSpace implements OnInit, AfterViewIn
    */
    public isQuestionSetEnabled: boolean;
 
+   userRoles:any;
+
    showDownloadQrBtn: any = (<HTMLInputElement>document.getElementById('showQrDownloadBtn'))
     ? (<HTMLInputElement>document.getElementById('showQrDownloadBtn')).value : 'true';
 
@@ -223,7 +225,28 @@ export class PublishedComponent extends WorkSpace implements OnInit, AfterViewIn
         this.fetchPublishedContent(this.config.appConfig.WORKSPACE.PAGE_LIMIT, this.pageNumber, bothParams);
       });
       this.isPublishedCourse();
+      this.getFormConfigs();
   }
+
+  getFormConfigs() {
+    if (!this.userRoles) {
+        if (this.isUserLoggedIn()) {
+            this.userService.userData$.subscribe((profileData: any) => {
+                if (profileData
+                    && profileData.userProfile
+                    && profileData.userProfile['profileUserType']) {
+                    this.userRoles = profileData.userProfile['roles'].length ? _.map(profileData.userProfile['roles'], 'role') : [];
+                    console.log('userRolesssss',this.userRoles)
+                }
+            });
+        }
+    }
+}
+
+public isUserLoggedIn(): boolean {
+  return this.userService && (this.userService.loggedIn || false);
+}
+
   isPublishedCourse() {
     const searchParams = {
       filters: {
@@ -314,9 +337,17 @@ export class PublishedComponent extends WorkSpace implements OnInit, AfterViewIn
           this.showError = false;
           this.showLoader = false;
           this.noResult = true;
-          this.noResultMessage = {
-            'messageText': 'messages.stmsg.m0022'
-          };
+          if(this.userRoles.includes('CONTENT_REVIEWER')){
+            this.noResultMessage = {
+              'messageText': 'messages.stmsg.m0000'
+            }
+          }
+          else {
+            this.noResultMessage = {
+              'messageText': 'messages.stmsg.m0022'
+            };
+          }
+         
         }
       },
       (err: ServerResponse) => {
