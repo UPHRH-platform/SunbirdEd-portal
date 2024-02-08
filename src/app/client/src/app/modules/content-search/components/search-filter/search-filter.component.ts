@@ -247,12 +247,36 @@ export class SearchFilterComponent implements OnInit, OnDestroy {
     this.selectedFilters = {};
     this.selectedNgModels = {};
     this.allValues = {};
+    const selectedBoardFilters = this.getFormatedFilters(filters['board'], this.queryFilters['board']);
+    const selectedMediumFilters = this.getFormatedFilters(filters['medium'], this.queryFilters['medium']);
+    // const subjectSelectedFilters = this.getFormatedFilters(filters['subject'], this.queryFilters['subject']);
+    let filteredOptions: { name: any; }[] = [];
     _.forEach(filters, (filterValues: { name: any }[], filterKey: string) => {
-      if (filterKey === 'board') {
-        const boardName = filterValues.find((board) => board.name === 'CBSE');
-        boardName && (boardName.name = 'CBSE/NCERT');
+      switch (filterKey) {
+        case 'board': {
+          const boardName = filterValues.find((board) => board.name === 'CBSE');
+          boardName && (boardName.name = 'CBSE/NCERT');
+          filteredOptions = filterValues
+          break;
+        }
+        case 'medium': {
+          filteredOptions = this.queryFilters['board'] && this.queryFilters['board'].length > 0 ? this.getDependentOptions(selectedBoardFilters, filterValues) : filterValues;
+          if (this.queryFilters['medium'] && this.queryFilters['medium'].length > 0 && filteredOptions.length > 0) {
+            const selectedMediums = filteredOptions.filter(filteredOption => this.queryFilters['medium'].includes(filteredOption.name));
+            this.queryFilters['medium'] = _.map(selectedMediums, 'name');
+          }
+          break;
+        }
+        case 'subject': {
+          filteredOptions = this.queryFilters['medium'] && this.queryFilters['medium'].length > 0 ? this.getDependentOptions(selectedMediumFilters, filterValues) : filterValues;
+          if (this.queryFilters['subject'] && this.queryFilters['subject'].length > 0 && filteredOptions.length > 0) {
+            const selectedSubjects = filteredOptions.filter(filteredOption => this.queryFilters['subject'].includes(filteredOption.name));
+            this.queryFilters['subject'] = _.map(selectedSubjects, 'name');
+          }
+          break;
+        }
       }
-      const values = this.allValues[filterKey] = _.map(filterValues, 'name');
+      const values = this.allValues[filterKey] = _.map(filteredOptions, 'name');
       if (_.get(values, 'length')) {
         values.sort((a, b) => a.localeCompare(b));
         let selectedIndices;
@@ -272,6 +296,45 @@ export class SearchFilterComponent implements OnInit, OnDestroy {
       }
     });
   }
+
+  getFormatedFilters(filters: any[], namesToFilter: any[]) {
+    const selectedFiltersList = [];
+    if (filters && filters.length > 0 && namesToFilter && namesToFilter.length > 0) {
+      filters.filter((element: any) => {
+        if(namesToFilter.includes(element.name)) {
+          selectedFiltersList.push (
+            {
+              name: element.name,
+              identifier: element.identifier,
+              category: element.category,
+              associations: element.associations,
+            }
+          )
+        }
+      })
+    }
+    return selectedFiltersList;
+  }
+
+  getDependentOptions(selectedParent: any[], dependenciesList: any[]) {
+    const dependentOptionsOfSelection: {
+      name: any
+    }[]  = [];
+    if (selectedParent && selectedParent.length > 0 && dependenciesList && dependenciesList.length > 0) {
+      selectedParent.forEach((element) => {
+        element.associations.filter((e1) => dependenciesList.some((e2) => 
+        {
+          if ((e1.identifier === e2.identifier && e1.category === e2.category) || (e2.identifier === undefined && e2.name.toLowerCase() === e1.name.toLowerCase())) {
+            dependentOptionsOfSelection.push({
+              name: e2.name
+            });
+          }
+        }))
+      })
+    }
+    return dependentOptionsOfSelection;
+  }
+
   private updateRoute(resetFilters?: boolean) {
     const selectedTab = _.get(this.activatedRoute, 'snapshot.queryParams.selectedTab') || _.get(this.defaultTab, 'contentType') || 'textbook';
     this.router.navigate([], {

@@ -792,17 +792,6 @@ export class ExplorePageComponent implements OnInit, OnDestroy, AfterViewInit {
                    }
                }
            }
-            // const formBody = {
-            //     "request": {
-            //         "filters": {
-            //             "status": []
-            //         },
-            //         "limit": 0,
-            //         "facets": [
-            //             "status"
-            //         ]
-            //     }
-            // }
             this.searchService.getMetrics(formBody)
                 .pipe((mergeMap(response => {
                     const formatedMetricsList = []

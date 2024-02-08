@@ -224,7 +224,7 @@ export class RejectedComponent extends WorkSpace implements OnInit, AfterViewIni
         this.query = this.queryParams['query'];
         this.fetchRejectedContent(this.config.appConfig.WORKSPACE.PAGE_LIMIT, this.pageNumber, bothParams);
       });
-      this.isRejectedCourse();
+      this.getFormConfigs();
   }
 
   getFormConfigs() {
@@ -239,6 +239,7 @@ export class RejectedComponent extends WorkSpace implements OnInit, AfterViewIni
                 });
             }
         }
+    this.isRejectedCourse();
 }
 
 public isUserLoggedIn(): boolean {
@@ -249,12 +250,16 @@ public isUserLoggedIn(): boolean {
     const searchParams = {
       filters: {
         status: ['Rejected'],
-        createdBy: this.userService.userid,
         contentType: ['Course'],
         objectType: this.config.appConfig.WORKSPACE.objectType,
       },
       sort_by: { lastUpdatedOn: 'desc' }
     };
+    if(this.userRoles.includes ('CONTENT_REVIEWER')) {
+      searchParams.filters['reviewerId'] = this.userService.userid;
+    } else {
+      searchParams.filters['createdBy'] = this.userService.userid;
+    }
       this.searchService.compositeSearch(searchParams).subscribe((data: ServerResponse) => {
         if (data?.result?.content && data?.result?.content?.length > 0) {
           if(this.showDownloadQrBtn == 'false'){
@@ -301,7 +306,6 @@ public isUserLoggedIn(): boolean {
     const searchParams = {
       filters: {
         status: ['Rejected'],
-        createdBy: this.userService.userid,
         objectType: this.isQuestionSetEnabled ? this.config.appConfig.WORKSPACE.allowedObjectType : this.config.appConfig.WORKSPACE.objectType,
         // tslint:disable-next-line:max-line-length
         primaryCategory: _.get(bothParams, 'queryParams.primaryCategory') || (!_.isEmpty(primaryCategories) ? primaryCategories : this.config.appConfig.WORKSPACE.primaryCategory),
@@ -316,6 +320,11 @@ public isUserLoggedIn(): boolean {
       query: _.toString(bothParams['queryParams'].query),
       sort_by: this.sort
     };
+    if(this.userRoles.includes ('CONTENT_REVIEWER')) {
+      searchParams.filters['reviewerId'] = this.userService.userid;
+    } else {
+      searchParams.filters['createdBy'] = this.userService.userid;
+    }
     this.loaderMessage = {
       'loaderMessage': this.resourceService.messages.stmsg.m0021,
     };
