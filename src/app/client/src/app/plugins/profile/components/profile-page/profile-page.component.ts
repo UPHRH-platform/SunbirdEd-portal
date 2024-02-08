@@ -510,7 +510,16 @@ export class ProfilePageComponent implements OnInit, OnDestroy, AfterViewInit {
   updateProfile(data) {
     this.profileService.updateProfile({ framework: data }).subscribe(res => {
       this.userProfile.framework = data;
+      const boardFramework = this.userProfile?.framework.board
+      this.boardFrameworkData = [
+        {
+          name:boardFramework[0]
+        }
+      ]
+      console.log('bboraddd',this.boardFrameworkData)
       this.toasterService.success(this.resourceService.messages.smsg.m0046);
+      this.userFrameworkData = this.boardFrameworkData[0]?.name;
+      this.getFrameworkRoleData();
       this.profileModal && this.profileModal.deny();
       // this.showEdit = false;
     }, err => {
