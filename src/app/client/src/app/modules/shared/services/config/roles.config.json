@@ -65,6 +65,7 @@
        "reportViewerRole": ["REPORT_VIEWER", "REPORT_ADMIN"],
        "alltextbookRole": ["ORG_ADMIN"],
        "uciAdmin": ["ORG_ADMIN"],
+       "userManagement":["ORG_ADMIN"],
        "programDashboardRole":["PROGRAM_MANAGER","PROGRAM_DESIGNER"],
        "nodalOfficer": ["NODAL_OFFICER"],
        "resultEvaluationRole": ["ORG_ADMIN"]
@@ -129,6 +130,8 @@
         "roles":["CONTENT_CREATOR","CONTENT_CREATION","CONTENT_REVIEWER","CONTENT_REVIEW","BOOK_CREATOR"],
         "roleName":"collaboratingRole","url":"workspace/content/collaborating-on","tab":"Collaborating On"
     }
-   ]
+   ],
+
+   "userManagementRoles":["CONTENT_CREATOR","PIAA_SETTER","CONTENT_REVIEWER","NODAL_OFFICER","ORG_ADMIN"]
 
 }

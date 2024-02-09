@@ -48,6 +48,9 @@ const appRoutes: Routes = [
     path: 'uci-admin', loadChildren: () => import('app/modules/uci-admin/uci-admin.module').then(m => m.UciAdminModule)
   },
   {
+    path: 'user-management', loadChildren: () => import('app/modules/user-management/user-management.module').then(m => m.UserManagementModule)
+  },
+  {
     path: '', loadChildren: () => import('app/modules/public/public.module').then(m => m.PublicModule)
   },
   {

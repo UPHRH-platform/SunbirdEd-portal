@@ -1,0 +1,136 @@
+.table-wrapper {
+  width: 80%;
+  margin: 0 auto;
+  margin-top: 10vh;
+}
+
+.user-table {
+  width: 80%;
+  border-collapse: collapse;
+  margin: 0 auto;
+
+  #green-slide-toggle {
+    .mat-slide-toggle.mat-checked .mat-slide-toggle-bar {
+      background-color: green;
+    }
+  }
+
+  thead {
+    tr {
+      &:first-child {
+        border: none;
+      }
+    }
+  }
+
+  th,
+  td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+
+    &:first-child {
+      width: 20px;
+    }
+
+    &:nth-child(1) {
+      border: 1px solid #ddd;
+      border-right: none;
+    }
+
+    &:nth-child(2),
+    &:nth-child(3),
+    &:nth-child(4),
+    &:nth-child(5){
+      width: 20vw;
+    }
+
+    &:nth-child(3) { 
+      max-width: 20vw; 
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+
+  th {
+    border-top: 2px solid #ddd;
+  }
+
+  td:last-child,
+  th:last-child {
+    width: 5%;
+    border-right: 1px solid #ddd;
+  }
+}
+
+.add-user-button {
+  margin-bottom: 10px;
+  margin-right: 10px;
+}
+
+.table-wrapper {
+  position: relative;
+}
+
+.modal {
+  position: fixed;
+  z-index: 999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.mat-select-panel {
+  z-index: 1100;
+}
+
+.modal-content {
+  z-index: 1000;
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: auto;
+  max-width: 460px;
+  border-radius: 20px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+
+  *:focus-visible {
+    border: none !important;
+  }
+
+  .mat-radio-button {
+    margin-right: 16px;
+  }
+}
+
+.close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 10px;
+}
+
+.form-group {
+  margin-bottom: 10px;
+}
+
+#save-user-btn {
+  display: flex;
+  justify-content: center;
+  align-self: center;
+  align-items: center;
+}
