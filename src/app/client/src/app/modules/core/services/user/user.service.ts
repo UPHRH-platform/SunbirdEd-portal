@@ -606,6 +606,56 @@ export class UserService {
     }
   }
 
+  getListOfUsers(request:any) {
+    const options = {
+      url: this.config.urlConFig.URLS.ADMIN.USER_SEARCH,
+      data: {
+        request
+      },
+    };
+
+    return this.learnerService.postWithHeaders(options).pipe(map(data => data?.result?.response?.content));
+  }
+
+  createUserByAdmin(requestParam:any): Observable<ServerResponse> {
+    const options = {
+      url: this.config.urlConFig.URLS.USER.SIGNUP,
+      data: {
+        request: requestParam
+      },
+    };
+    
+    return this.learnerService.postWithHeaders(options).pipe(map((response: ServerResponse) => {
+      return response;
+    }));
+  }
+
+  blockUser(request:any): Observable<ServerResponse> {
+    const options = {
+      url: this.config.urlConFig.URLS.ADMIN.DELETE_USER,
+      data: {
+        request
+      },
+    };
+
+    return this.learnerService.postWithHeaders(options).pipe(map((response: ServerResponse) => {
+      return response;
+    }));
+  }
+
+  unblockUser(request:any):Observable<ServerResponse>{
+    const options = {
+      url: this.config.urlConFig.URLS.ADMIN.UNBLOCK_USER,
+      data: {
+        request
+      },
+    };
+
+    return this.learnerService.postWithHeaders(options).pipe(map((response: ServerResponse) => {
+      return response;
+    }));
+  }
+
   // getLogout(){
   //  return this.http.get(this.appBaseUrl+'/logoff')
   // }

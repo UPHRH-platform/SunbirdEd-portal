@@ -1,0 +1,100 @@
+<div class="modal" *ngIf="isModalOpen">
+  <div class="modal-content">
+    <span class="close" (click)="closeModal()">&times;</span>
+    <h2 class="text-center">{{isEdit?"Edit": "Create"}} User</h2>
+    <form [formGroup]="userForm">
+      <div class="grid-container">
+        <div>
+          <mat-form-field appearance="outline" color="warn">
+            <mat-label>First name</mat-label>
+            <input matInput required formControlName="firstName">
+            <mat-error *ngIf="userForm.get('firstName').invalid && userForm.get('firstName').touched">
+              First name is required
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div>
+          <mat-form-field appearance="outline" color="warn">
+            <mat-label>Last name</mat-label>
+            <input matInput formControlName="lastName">
+          </mat-form-field>
+        </div>
+
+        <div>
+          <mat-form-field appearance="outline" color="warn">
+            <mat-label>Email</mat-label>
+            <input type="email" matInput required formControlName="email">
+            <mat-error *ngIf="userForm.get('email').invalid && userForm.get('email').touched">
+              Email is required
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div>
+          <mat-form-field appearance="outline" color="warn">
+            <mat-label>Mobile Number</mat-label>
+            <input matInput required formControlName="phone">
+            <mat-error *ngIf="userForm.get('phone').invalid && userForm.get('phone').touched">
+              Mobile number is required
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div>
+          <mat-form-field appearance="outline" color="warn">
+            <mat-label>Role</mat-label>
+            <mat-select required formControlName="roles" multiple>
+              <mat-option value="" disabled>--Select User Role--</mat-option>
+              <mat-option *ngFor="let role of availableRoles" [value]="role">{{ role }}</mat-option>
+            </mat-select>
+            <mat-error *ngIf="userForm.get('roles').invalid && userForm.get('roles').touched">
+              Role is required
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div>
+          <label class="d-block">Status*</label>
+          <mat-radio-group color="warn" formControlName="status">
+            <mat-radio-button value="1">Active</mat-radio-button>
+            <mat-radio-button value="0">In Active</mat-radio-button>
+          </mat-radio-group>
+        </div>
+      </div>
+    </form>
+    <button id="save-user-btn" class="sb-btn sb-btn-primary p-8 w-10" type="submit" [disabled]="userForm.invalid"
+      (click)="saveUser()">Save</button>
+  </div>
+</div>
+<div class="table-wrapper">
+  <table class="user-table">
+    <thead>
+      <tr>
+        <button class="sb-btn sb-btn-primary mb-16 p-8" (click)="openModal()">Add User</button>
+      </tr>
+      <tr>
+        <th><input type="checkbox" [(ngModel)]="selectAllChecked" (change)="toggleSelectAll()"></th>
+        <th>Full Name</th>
+        <th>Role</th>
+        <th>Email</th>
+        <th>Mobile</th>
+        <th>Status</th>
+        <!-- <th>Action</th> -->
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of users">
+        <td><input type="checkbox" [(ngModel)]="user.selected"></td>
+        <td>{{ user.firstName + ' ' + user.lastName }}</td>
+        <td>{{ user.roles }}</td>
+        <td>{{ user.email }}</td>
+        <td>{{ user.phone }}</td>
+        <td>
+          <mat-slide-toggle [checked]="user.status === 1" (change)="toggleStatus(user.status,user.id)"></mat-slide-toggle>
+        </td>
+        <!-- <td><button class="sb-btn sb-btn-primary p-8" (click)="editUser(user)" disabled>Edit</button></td> -->
+      </tr>
+    </tbody>
+  </table>
+</div>

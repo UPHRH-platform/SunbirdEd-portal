@@ -464,6 +464,13 @@
               </svg></i>
             {{resourceService.frmelmnts?.lbl?.communicationConsole}} 
           </li>
+          <li class="list-item" tabindex="0" (click)="toggleSideMenu(false)"
+          appPermission [permission]='orgAdminRole' *ngIf='!isDesktopApp && permissionService.permissionAvailable' routerLink="user-management">
+          <i class="icon-svg icon-svg--sm icon-manage mr-8"><svg class="icon icon-svg--primary">
+              <use xlink:href="./assets/images/sprite.svg#profileuser"></use>
+            </svg></i>
+          {{resourceService.frmelmnts?.lbl?.userManagemenmt}} 
+        </li>
 
           <li class="list-item" role="link" appOnlineOnly (click)="toggleSideMenu(false)"
             [class.active]="router.isActive(routerLinks?.groups)" tabindex="0"
