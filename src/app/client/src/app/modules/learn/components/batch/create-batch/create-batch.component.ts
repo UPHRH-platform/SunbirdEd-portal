@@ -14,6 +14,8 @@ import { ConfigService } from '@sunbird/shared';
 import { CsModule } from '@project-sunbird/client-services';
 import { CsLibInitializerService } from '../../../../../service/CsLibInitializer/cs-lib-initializer.service';
 import { DiscussionService } from '../../../../../../app/modules/discussion/services/discussion/discussion.service';
+import { PopupControlService } from '../../../../../service/popup-control.service';
+
 
 @Component({
   selector: 'app-create-batch',
@@ -38,6 +40,7 @@ export class CreateBatchComponent implements OnInit, OnDestroy, AfterViewInit {
   * participantList for mentorList
   */
   participantList = [];
+  showTncPopup = false;
 
   public selectedParticipants: any = [];
 
@@ -112,6 +115,7 @@ export class CreateBatchComponent implements OnInit, OnDestroy, AfterViewInit {
    * @param {UserService} UserService Reference of UserService
   */
   constructor(routerNavigationService: RouterNavigationService,
+    public popupControlService: PopupControlService,
     activatedRoute: ActivatedRoute,
     route: Router,
     resourceService: ResourceService, userService: UserService,
@@ -262,6 +266,10 @@ export class CreateBatchComponent implements OnInit, OnDestroy, AfterViewInit {
       participantList: _.uniqBy(participantList, 'id'),
       mentorList: _.uniqBy(mentorList, 'id')
     };
+  }
+  showAndHidePopup(mode: boolean) {
+    this.showTncPopup = mode;
+    this.popupControlService.changePopupStatus(true);
   }
 
   public createBatch() {
